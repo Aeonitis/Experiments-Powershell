@@ -1,24 +1,34 @@
+# ---------------------------------------------------------------------------------------------------
+# A script used to ping the INIS office (Burgh Quay Registration Office) for appointment availability
+# Why? Their process ignores the user experience entirely. Simple.
+
+# This guy made a Telegram app which you should probably look into... 
+# https://harshp.com/dev/projects/gnib-appointments/appointment-notifications-using-telegram-app/
+# 
+# To use this script:
+# 1. you need to Set-ExecutionPolicy for permission to run scripts on your machine.
+# 2. you just save this script and type ./PingNotifier.ps1 (assuming you saved it with the same name)
+# 3. watch it run, and if it finds some slots, a pop-up window will appear, and...
+# 4. YOU JUMP IN TO FILL THE FORM QUICK ENOUGH NOT TO LOSE THAT CHANCE (you may have prefilled your form perhaps)
+# ---------------------------------------------------------------------------------------------------
+
 # Set-ExecutionPolicy Bypass -scope Process -Force
 # Set-ExecutionPolicy -Scope Process -ExecutionPolicy Unrestricted
-
-
 
 # BQRO just means BurghQuayRegistrationOffice
 $URIBQRODomain = 'https://burghquayregistrationoffice.inis.gov.ie'
 $URIBQROSubpathForAppointments = '/Website/AMSREG/AMSRegWeb.nsf/(getAppsNear)?openpage'
 # $URIBQROSubpathForAppointments = '/Website/AMSREG/AMSRegWeb.nsf/(getApps4DTAvailability)?openpage'
 # $requestHeaders = @{
-#     Accept = '*/*'      # Cross-origin resource sharing
-#     Origin = 'null'     # Cross-origin resource sharing
 #     # Connection = 'keep-alive'
 # }
 
 $requestHeaders = @{}
 $requestHeaders.Add("User-agent", "script/powershell")
-$requestHeaders.Add("Accept", "*/*")
+$requestHeaders.Add("Accept", "*/*")                        # Cross-origin resource sharing
 $requestHeaders.Add("Accept-Language", "en-US,en;q=0.5")
 $requestHeaders.Add("Accept-Encoding", "gzip, deflate, br")
-$requestHeaders.Add("Origin", "null")
+$requestHeaders.Add("Origin", "null")                       # Cross-origin resource sharing
 # $requestHeaders.Add("Connection", "keep-alive")
 
 # Not sure what '$1' category does when I use (cat = '$1') in params yet...
@@ -32,7 +42,6 @@ enum appointmentCategoryType {
 #     isRegistered("Renewal")
 #     isNotRegistered "New"
 # }
-
 
 # Invoke-WebRequest -Uri "http://httpbin.org/headers" -Headers $headers
 # $URLToPing = ()
@@ -55,7 +64,6 @@ $requestParams.Add("sbcat","All")
 $requestParams.Add("typ", "Renewal")
 
 $requestJSONBody = $requestParams | ConvertTo-Json
-
 
 function NotifyAbruptly() {
     # TODO Script to be added in future
